@@ -10,4 +10,4 @@ class Config:
         self.cnn_activation = "relu"
         self.dense_activation = "relu"
         self.num_classes = 10
-        self.LR = 1e-3
+        self.LR = 1e-4
