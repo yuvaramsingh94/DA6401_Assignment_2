@@ -62,7 +62,7 @@ class LightningModule(pl.LightningModule):
     def on_train_epoch_end(self):
         # Calculate epoch accuracy
         epoch_acc = self.train_correct / self.train_total
-        self.log("train_acc_epoch", epoch_acc, prog_bar=True)
+        self.log("train_acc_epoch", epoch_acc)
 
         # Reset counters
         self.train_correct = 0
@@ -71,7 +71,7 @@ class LightningModule(pl.LightningModule):
     def on_validation_epoch_end(self):
         # Calculate epoch accuracy
         epoch_acc = self.val_correct / self.val_total
-        self.log("val_acc_epoch", epoch_acc, prog_bar=True)
+        self.log("val_acc_epoch", epoch_acc)
 
         # Reset counters
         self.val_correct = 0
