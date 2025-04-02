@@ -39,8 +39,14 @@ class CNNNetwork(nn.Module):
             )
             if self.cnn_activation == "relu":
                 self.conv_layers.append(nn.ReLU())
-            elif self.cnn_activation == "sigmoid":
-                self.conv_layers.append(nn.Sigmoid())
+            elif self.cnn_activation == "elu":
+                self.conv_layers.append(nn.ELU())
+            elif self.cnn_activation == "gelu":
+                self.conv_layers.append(nn.GELU())
+            elif self.cnn_activation == "silu":
+                self.conv_layers.append(nn.SiLU())
+            elif self.cnn_activation == "mish":
+                self.conv_layers.append(nn.Mish())
 
             ## Add the Max pooling
             self.conv_layers.append(nn.MaxPool2d(kernel_size=2))
