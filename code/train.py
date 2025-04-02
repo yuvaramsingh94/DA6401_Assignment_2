@@ -46,7 +46,7 @@ def dir_to_df(PATH: os.path) -> pd.DataFrame:
     return data_df
 
 
-DATASET_PATH = os.path.join("dataset", "nature_12K", "inaturalist_12K")
+DATASET_PATH = os.path.join("dataset", "inaturalist_12K")
 TRAIN_PATH = os.path.join(DATASET_PATH, "train")
 TEST_PATH = os.path.join(DATASET_PATH, "val")
 
