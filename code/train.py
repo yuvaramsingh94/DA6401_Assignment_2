@@ -108,7 +108,7 @@ train_loader = DataLoader(
     shuffle=True,
     drop_last=True,
     pin_memory=True,
-    #    num_workers=2,
+    num_workers=2,
 )
 val_loader = DataLoader(
     val_dataset,
@@ -116,7 +116,7 @@ val_loader = DataLoader(
     shuffle=False,
     drop_last=False,
     pin_memory=True,
-    #    num_workers=2,
+    num_workers=2,
 )
 
 # wandb.login()
