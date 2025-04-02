@@ -109,7 +109,7 @@ train_loader = DataLoader(
     shuffle=True,
     drop_last=True,
     pin_memory=True,
-    num_workers=2,
+    # num_workers=2,
 )
 val_loader = DataLoader(
     val_dataset,
@@ -117,7 +117,7 @@ val_loader = DataLoader(
     shuffle=False,
     drop_last=False,
     pin_memory=True,
-    num_workers=2,
+    # num_workers=2,
 )
 
 # wandb.login()
@@ -134,7 +134,7 @@ wandb_logger = WandbLogger(
 )
 trainer = pl.Trainer(
     max_epochs=5,
-    accelerator="gpu",
+    accelerator="auto",
     log_every_n_steps=100,
     logger=wandb_logger,
 )  # Added accelerator gpu, can be cpu also, devices set to 1
