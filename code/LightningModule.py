@@ -42,7 +42,7 @@ class LightningModule(pl.LightningModule):
         self.train_total += batch_size
 
         loss = self.loss(logits, y)
-        self.train_loss.append(loss)
+        self.train_loss.append(loss.view(1))
         # self.log("train_loss", loss)
         return loss
 
@@ -61,7 +61,7 @@ class LightningModule(pl.LightningModule):
         self.val_correct += correct
         self.val_total += batch_size
         loss = self.loss(logits, y)
-        self.val_loss.append(loss)
+        self.val_loss.append(loss.view(1))
         # self.log("val_loss", loss)
         return loss
 
@@ -69,7 +69,8 @@ class LightningModule(pl.LightningModule):
         # Calculate epoch accuracy
         epoch_acc = self.train_correct / self.train_total
         self.log("train_acc_epoch", epoch_acc)
-        self.log("train_loss_epoch", np.array(self.train_loss) / len(self.train_loss))
+        if len(self.train_loss) > 0:
+            self.log("train_loss_epoch", torch.cat(self.train_loss).mean())
         # Reset counters
         self.train_correct = 0
         self.train_total = 0
@@ -79,7 +80,8 @@ class LightningModule(pl.LightningModule):
         # Calculate epoch accuracy
         epoch_acc = self.val_correct / self.val_total
         self.log("val_acc_epoch", epoch_acc)
-        self.log("val_loss_epoch", np.array(self.val_loss) / len(self.val_loss))
+        if len(self.val_loss) > 0:
+            self.log("val_loss_epoch", torch.cat(self.val_loss).mean())
         # Reset counters
         self.val_correct = 0
         self.val_total = 0
