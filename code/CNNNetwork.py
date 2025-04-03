@@ -37,26 +37,30 @@ class CNNNetwork(nn.Module):
                     kernel_size=self.filter_size,
                 )
             )
-            if self.cnn_activation == "relu":
-                self.conv_layers.append(nn.ReLU())
-            elif self.cnn_activation == "elu":
-                self.conv_layers.append(nn.ELU())
-            elif self.cnn_activation == "gelu":
-                self.conv_layers.append(nn.GELU())
-            elif self.cnn_activation == "silu":
-                self.conv_layers.append(nn.SiLU())
-            elif self.cnn_activation == "mish":
-                self.conv_layers.append(nn.Mish())
+            self.conv_layers.append(self.act_select(act=self.cnn_activation))
 
             ## Add the Max pooling
             self.conv_layers.append(nn.MaxPool2d(kernel_size=2))
 
         ## Work with the dense layer
-        ## TODO Have to find a way to adjust the in_features
-        self.dense = nn.LazyLinear(out_features=self.num_dense_neurons)
-        self.output_layer = nn.Linear(
-            in_features=self.num_dense_neurons, out_features=self.num_classes
+        self.FCN_layers = nn.ModuleList()
+        self.FCN_layers.append(nn.LazyLinear(out_features=self.num_dense_neurons))
+        self.FCN_layers.append(self.act_select(act=self.dense_activation))
+        self.FCN_layers.append(
+            nn.Linear(in_features=self.num_dense_neurons, out_features=self.num_classes)
         )
+
+    def act_select(self, act: str):
+        if act == "relu":
+            return nn.ReLU()
+        elif act == "elu":
+            return nn.ELU()
+        elif act == "gelu":
+            return nn.GELU()
+        elif act == "silu":
+            return nn.SiLU()
+        elif act == "mish":
+            return nn.Mish()
 
     def forward(self, x):
 
@@ -64,7 +68,7 @@ class CNNNetwork(nn.Module):
             x = layer(x)
         x = torch.flatten(x, 1)
 
-        x = self.dense(x)
-        x = self.output_layer(x)
+        for layer in self.FCN_layers:
+            x = layer(x)
 
         return x

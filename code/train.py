@@ -6,45 +6,16 @@ import pytorch_lightning as pl
 import torch
 import wandb
 from lightning.pytorch.loggers import WandbLogger
-from torchvision.transforms.v2 import Normalize
-from torchvision.transforms import Resize
-from torch.utils.data import Dataset
 import pandas as pd
-from torchvision.io import read_image, decode_image
+from torchvision.transforms.v2 import Normalize
 import os
 from sklearn.model_selection import StratifiedShuffleSplit
 from lightning.pytorch import Trainer, seed_everything
+from dataloader import CustomImageDataset
+from utils import dir_to_df
 
 SEED = 5
 seed_everything(SEED, workers=True)
-
-"""
-# Create dummy data
-num_samples = 64
-input_size = (3, 256, 256)  # Example input size
-X = torch.randn(num_samples, *input_size)
-y = torch.randint(0, 10, (num_samples,))  # Dummy labels
-dataset = TensorDataset(X, y)
-train_loader = DataLoader(dataset, batch_size=32)
-val_loader = DataLoader(dataset, batch_size=32)
-"""
-
-
-def dir_to_df(PATH: os.path) -> pd.DataFrame:
-    data_dict = {"image_path": [], "label": []}
-    for label in os.listdir(PATH):
-        if os.path.isdir(os.path.join(PATH, label)):
-            image_path = [
-                os.path.join(os.path.join(PATH, label), i)
-                for i in os.listdir(os.path.join(PATH, label))
-                if "jpg" in i
-            ]
-            label_list = [label] * len(image_path)
-            data_dict["image_path"].extend(image_path)
-            data_dict["label"].extend(label_list)
-
-    data_df = pd.DataFrame.from_dict(data_dict)
-    return data_df
 
 
 DATASET_PATH = os.path.join("dataset", "inaturalist_12K")
@@ -67,35 +38,8 @@ for train_idx, val_idx in split.split(data_df, data_df["label_id"]):
     val_set = data_df.iloc[val_idx]
 
 
-image_normalization = Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-
-
-class CustomImageDataset(Dataset):
-    def __init__(
-        self,
-        dataset_df: pd.DataFrame,
-        image_normalization: Normalize,
-        size: tuple = (256, 256),
-    ):
-        self.dataset_df = dataset_df
-        self.image_normalization = image_normalization
-        self.size = size
-        self.Resize = Resize(size=size)
-
-    def __len__(self):
-        return len(self.dataset_df)
-
-    def __getitem__(self, idx: int):
-        img_path = self.dataset_df.iloc[idx]["image_path"]  # .values[0]
-        image = decode_image(img_path, mode="RGB")
-        image = self.Resize(image)
-        image = self.image_normalization(image / image.max())
-
-        label = self.dataset_df.iloc[idx]["label_id"]  # .values[0]
-        return image, label
-
-
 config = Config()
+image_normalization = Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 train_dataset = CustomImageDataset(
     dataset_df=train_set, image_normalization=image_normalization
 )

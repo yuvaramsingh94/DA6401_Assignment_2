@@ -8,6 +8,9 @@ class Config:
         self.filter_size = 3
         self.num_dense_neurons = 256
         self.cnn_activation = "relu"
+        self.augmentation = True
         self.dense_activation = "relu"
         self.num_classes = 10
         self.LR = 1e-4
+        self.batch_size = 32
+        self.epoch = 5
