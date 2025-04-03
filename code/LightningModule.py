@@ -4,6 +4,7 @@ from CNNNetwork import CNNNetwork
 from config import Config
 import torch.nn.functional as F
 import torch
+import numpy as np
 
 
 class LightningModule(pl.LightningModule):
@@ -22,6 +23,9 @@ class LightningModule(pl.LightningModule):
         self.val_correct = 0
         self.val_total = 0
 
+        self.train_loss = []
+        self.val_loss = []
+
     def forward(self, x):
         return self.CNNmodel(x)
 
@@ -38,7 +42,8 @@ class LightningModule(pl.LightningModule):
         self.train_total += batch_size
 
         loss = self.loss(logits, y)
-        self.log("train_loss", loss)
+        self.train_loss.append(loss)
+        # self.log("train_loss", loss)
         return loss
 
     def validation_step(
@@ -56,26 +61,29 @@ class LightningModule(pl.LightningModule):
         self.val_correct += correct
         self.val_total += batch_size
         loss = self.loss(logits, y)
-        self.log("val_loss", loss)
+        self.val_loss.append(loss)
+        # self.log("val_loss", loss)
         return loss
 
     def on_train_epoch_end(self):
         # Calculate epoch accuracy
         epoch_acc = self.train_correct / self.train_total
         self.log("train_acc_epoch", epoch_acc)
-
+        self.log("train_loss_epoch", np.array(self.train_loss) / len(self.train_loss))
         # Reset counters
         self.train_correct = 0
         self.train_total = 0
+        self.train_loss = []
 
     def on_validation_epoch_end(self):
         # Calculate epoch accuracy
         epoch_acc = self.val_correct / self.val_total
         self.log("val_acc_epoch", epoch_acc)
-
+        self.log("val_loss_epoch", np.array(self.val_loss) / len(self.val_loss))
         # Reset counters
         self.val_correct = 0
         self.val_total = 0
+        self.val_loss = []
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.config.LR)
