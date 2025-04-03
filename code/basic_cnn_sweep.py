@@ -137,13 +137,13 @@ def main():
     wandb_logger = WandbLogger(
         project=config.wandb_project,
         name=config.wandb_entity,
-        log_model="all",
+        log_model=False,
         config=config,
     )
     trainer = pl.Trainer(
         max_epochs=config.epoch,
         accelerator="auto",
-        log_every_n_steps=100,
+        log_every_n_steps=None,
         logger=wandb_logger,
     )  # Added accelerator gpu, can be cpu also, devices set to 1
 
