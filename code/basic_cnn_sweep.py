@@ -16,9 +16,27 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from lightning.pytorch import Trainer, seed_everything
 from utils import dir_to_df
 from dataloader import CustomImageDataset
+import argparse
 
 SEED = 5
 seed_everything(SEED, workers=True)
+
+## Get the Required keys from secrets if its in kaggle
+parser = argparse.ArgumentParser(description="HP sweep")
+parser.add_argument(
+    "--kaggle", action="store_true", help="Set this flag to true if its kaggle"
+)
+# Parse the arguments
+args = parser.parse_args()
+
+
+if args.kaggle:
+    ## Kaggle secret
+    from kaggle_secrets import UserSecretsClient
+
+    secret_label = "wandb_api_key"
+    wandb_key = UserSecretsClient().get_secret(secret_label)
+    wandb.login(key=wandb_key)
 
 
 ## Dataloader
@@ -87,12 +105,22 @@ def main():
     tuning.
     """
     config = Config()
-    wandb.init(
-        # Set the project where this run will be logged
-        project=config.wandb_project,
-        # Track hyperparameters and run metadata
-        # config=config,
-    )
+    if args.kaggle:
+
+        wandb.init(
+            # Set the project where this run will be logged
+            project=config.wandb_project,
+            # Track hyperparameters and run metadata
+            # config=config,
+        )
+    else:
+
+        wandb.init(
+            # Set the project where this run will be logged
+            project=config.wandb_project,
+            # Track hyperparameters and run metadata
+            # config=config,
+        )
 
     wandb.run.name = f"basic_CNN_CF_{wandb.config.CNN_filters}_D_{wandb.config.num_dense_neurons}_A_{wandb.config.augmentation}"
     ## Update the config dict with the hpt from sweep
