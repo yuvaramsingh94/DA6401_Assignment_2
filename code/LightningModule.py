@@ -42,7 +42,7 @@ class LightningModule(pl.LightningModule):
         self.train_total += batch_size
 
         loss = self.loss(logits, y)
-        self.train_loss.append(loss.view(1))
+        self.train_loss.append(loss.view(1).cpu())
         # self.log("train_loss", loss)
         return loss
 
@@ -61,7 +61,7 @@ class LightningModule(pl.LightningModule):
         self.val_correct += correct
         self.val_total += batch_size
         loss = self.loss(logits, y)
-        self.val_loss.append(loss.view(1))
+        self.val_loss.append(loss.view(1).cpu())
         # self.log("val_loss", loss)
         return loss
 
