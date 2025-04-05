@@ -29,6 +29,7 @@ parser.add_argument(
 parser.add_argument(
     "--colab", action="store_true", help="Set this flag to true if its colab"
 )
+parser.add_argument("-wandb_key", "--wandb_key", type=str, help="wandb key")
 # Parse the arguments
 args = parser.parse_args()
 
@@ -44,10 +45,10 @@ if args.kaggle:
 
 if args.colab:
     ## Kaggle secret
-    from google.colab import userdata
+    # from google.colab import userdata
 
-    secret_label = "wandb_api_key"
-    wandb_key = userdata.get(secret_label)
+    # secret_label = "wandb_api_key"
+    # wandb_key = userdata.get(secret_label)
     wandb.login(key=wandb_key)
 
 ## Dataloader
