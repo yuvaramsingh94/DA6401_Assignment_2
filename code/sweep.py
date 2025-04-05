@@ -26,6 +26,9 @@ parser = argparse.ArgumentParser(description="HP sweep")
 parser.add_argument(
     "--kaggle", action="store_true", help="Set this flag to true if its kaggle"
 )
+parser.add_argument(
+    "--colab", action="store_true", help="Set this flag to true if its colab"
+)
 # Parse the arguments
 args = parser.parse_args()
 
@@ -38,6 +41,14 @@ if args.kaggle:
     wandb_key = UserSecretsClient().get_secret(secret_label)
     wandb.login(key=wandb_key)
 
+
+if args.colab:
+    ## Kaggle secret
+    from google.colab import userdata
+
+    secret_label = "wandb_api_key"
+    wandb_key = userdata.get(secret_label)
+    wandb.login(key=wandb_key)
 
 ## Dataloader
 
@@ -76,7 +87,8 @@ sweep_configuration = {
         "num_dense_neurons": {"values": [128, 256, 512, 1024]},
         "batch_size": {"values": [16, 32, 64]},
         "augmentation": {"values": [True, False]},
-        "basic_CNN": {"values": [True]},
+        "basic_CNN": {"values": [False]},
+        "pretrained_bb": {"values": [True]},
         "cnn_activation": {
             "values": [
                 "relu",
@@ -136,6 +148,7 @@ def main():
     config.augmentation = wandb.config.augmentation
     config.cnn_activation = wandb.config.cnn_activation
     config.dense_activation = wandb.config.dense_activation
+    config.pretrained_bb = wandb.config.pretrained_bb
 
     train_dataset = CustomImageDataset(
         dataset_df=train_set,

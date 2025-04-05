@@ -14,3 +14,4 @@ class Config:
         self.LR = 1e-4
         self.batch_size = 32
         self.epoch = 5
+        self.pretrained_bb = True
