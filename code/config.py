@@ -15,3 +15,4 @@ class Config:
         self.batch_size = 32
         self.epoch = 5
         self.pretrained_bb = True
+        self.drop_prob = 0.2

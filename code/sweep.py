@@ -41,19 +41,21 @@ if args.kaggle:
     secret_label = "wandb_api_key"
     wandb_key = UserSecretsClient().get_secret(secret_label)
     wandb.login(key=wandb_key)
-
-
-if args.colab:
+elif args.colab:
     ## Kaggle secret
     # from google.colab import userdata
 
     # secret_label = "wandb_api_key"
     # wandb_key = userdata.get(secret_label)
     wandb.login(key=args.wandb_key)
+else:
+    wandb.login()
+
+## IF basic CNN architecture is required
+basic_CNN = True
+
 
 ## Dataloader
-
-
 DATASET_PATH = os.path.join("dataset", "inaturalist_12K")
 if args.kaggle:
     DATASET_PATH = os.path.join(
@@ -87,9 +89,8 @@ sweep_configuration = {
         "CNN_filter_size": {"values": [3, 5]},
         "num_dense_neurons": {"values": [128, 256, 512, 1024]},
         "batch_size": {"values": [16, 32, 64]},
+        "drop_prob": {"values": [0.2, 0.3, 0.4, 0.5]},
         "augmentation": {"values": [True, False]},
-        "basic_CNN": {"values": [False]},
-        "pretrained_bb": {"values": [True]},
         "cnn_activation": {
             "values": [
                 "relu",
@@ -111,6 +112,13 @@ sweep_configuration = {
     },
     #    "early_terminate": {"type": "hyperband", "min_iter": 3, "eta": 3},
 }
+
+if basic_CNN:
+    sweep_configuration["parameters"]["basic_CNN"] = {"values": [True]}
+    sweep_configuration["parameters"]["pretrained_bb"] = {"values": [False]}
+else:
+    sweep_configuration["basic_CNN"] = {"values": [False]}
+    sweep_configuration["pretrained_bb"] = {"values": [True]}
 
 image_normalization = Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
@@ -150,6 +158,7 @@ def main():
     config.cnn_activation = wandb.config.cnn_activation
     config.dense_activation = wandb.config.dense_activation
     config.pretrained_bb = wandb.config.pretrained_bb
+    config.drop_prob = wandb.config.drop_prob
 
     train_dataset = CustomImageDataset(
         dataset_df=train_set,

@@ -23,7 +23,7 @@ class CNNNetwork(nn.Module):
         self.dense_activation = config.dense_activation
         self.num_classes = config.num_classes
         self.pretrained_bb = config.pretrained_bb
-
+        self.drop_prob = config.drop_prob
         if self.pretrained_bb:
             self.bb = resnet50(weights=ResNet50_Weights.DEFAULT)
 
@@ -37,6 +37,12 @@ class CNNNetwork(nn.Module):
                     kernel_size=self.filter_size,
                 )
             )
+            ## BN
+            self.conv_layers.append(nn.BatchNorm2d(3))
+            self.conv_layers.append(self.act_select(act=self.cnn_activation))
+            ## Drop
+            self.conv_layers.append(nn.Dropout(p=self.drop_prob))
+            self.conv_layers.append(nn.MaxPool2d(kernel_size=2))
             for _ in range(self.num_conv_layers - 1):
 
                 self.conv_layers.append(
@@ -46,15 +52,20 @@ class CNNNetwork(nn.Module):
                         kernel_size=self.filter_size,
                     )
                 )
+                ## BN
+                self.conv_layers.append(nn.BatchNorm2d(self.num_filters))
                 self.conv_layers.append(self.act_select(act=self.cnn_activation))
 
-                ## Add the Max pooling
+                ## Drop
+                self.conv_layers.append(nn.Dropout(p=self.drop_prob))
                 self.conv_layers.append(nn.MaxPool2d(kernel_size=2))
 
         ## Work with the dense layer
         self.FCN_layers = nn.ModuleList()
         self.FCN_layers.append(nn.LazyLinear(out_features=self.num_dense_neurons))
+        self.FCN_layers.append(nn.BatchNorm1d(self.num_dense_neurons))
         self.FCN_layers.append(self.act_select(act=self.dense_activation))
+        self.FCN_layers.append(nn.Dropout(p=self.drop_prob))
         self.FCN_layers.append(
             nn.Linear(in_features=self.num_dense_neurons, out_features=self.num_classes)
         )
