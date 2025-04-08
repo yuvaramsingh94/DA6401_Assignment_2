@@ -38,7 +38,7 @@ class CNNNetwork(nn.Module):
                 )
             )
             ## BN
-            self.conv_layers.append(nn.BatchNorm2d(3))
+            self.conv_layers.append(nn.BatchNorm2d(self.num_filters))
             self.conv_layers.append(self.act_select(act=self.cnn_activation))
             ## Drop
             self.conv_layers.append(nn.Dropout(p=self.drop_prob))
