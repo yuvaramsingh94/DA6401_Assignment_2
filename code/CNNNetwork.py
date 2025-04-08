@@ -63,7 +63,7 @@ class CNNNetwork(nn.Module):
         ## Work with the dense layer
         self.FCN_layers = nn.ModuleList()
         self.FCN_layers.append(nn.LazyLinear(out_features=self.num_dense_neurons))
-        self.FCN_layers.append(nn.BatchNorm1d(self.num_dense_neurons))
+        # self.FCN_layers.append(nn.BatchNorm1d(self.num_dense_neurons))
         self.FCN_layers.append(self.act_select(act=self.dense_activation))
         self.FCN_layers.append(nn.Dropout(p=self.drop_prob))
         self.FCN_layers.append(
