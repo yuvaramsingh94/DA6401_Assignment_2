@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader, TensorDataset
 import pytorch_lightning as pl
 import torch
 import wandb
+import gc
 from lightning.pytorch.loggers import WandbLogger
 from torchvision.transforms.v2 import Normalize
 from torchvision.transforms import Resize
@@ -203,11 +204,14 @@ def main():
         logger=wandb_logger,
     )  # Added accelerator gpu, can be cpu also, devices set to 1
 
-    trainer.fit(
-        lit_model,
-        train_loader,
-        val_loader,
-    )
+    try:
+        trainer.fit(lit_model, train_loader, val_loader)
+    finally:
+        # Mandatory cleanup
+        wandb.finish()
+        del lit_model, trainer, train_loader, val_loader
+        torch.cuda.empty_cache()
+        gc.collect()
 
 
 config = Config()
