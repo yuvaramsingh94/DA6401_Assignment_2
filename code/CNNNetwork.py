@@ -36,6 +36,7 @@ class CNNNetwork(nn.Module):
                     in_channels=3,
                     out_channels=self.num_filters,
                     kernel_size=self.filter_size,
+                    padding="same",
                 )
             )
             ## BN
@@ -52,6 +53,7 @@ class CNNNetwork(nn.Module):
                         in_channels=self.num_filters * i,
                         out_channels=self.num_filters * (i + 1),
                         kernel_size=self.filter_size,
+                        padding="same",
                     )
                 )
                 ## BN
