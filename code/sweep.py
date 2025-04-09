@@ -218,4 +218,4 @@ config = Config()
 ## initialize the HPT
 sweep_id = wandb.sweep(sweep=sweep_configuration, project=config.wandb_project)
 
-wandb.agent(sweep_id, function=main, count=50)
+wandb.agent(sweep_id, function=main, count=5)
