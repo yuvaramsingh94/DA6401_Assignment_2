@@ -24,6 +24,7 @@ class CNNNetwork(nn.Module):
         self.num_classes = config.num_classes
         self.pretrained_bb = config.pretrained_bb
         self.drop_prob = config.drop_prob
+        self.bn = config.bn
         if self.pretrained_bb:
             self.bb = resnet50(weights=ResNet50_Weights.DEFAULT)
 
@@ -38,7 +39,8 @@ class CNNNetwork(nn.Module):
                 )
             )
             ## BN
-            self.conv_layers.append(nn.BatchNorm2d(self.num_filters))
+            if self.bn:
+                self.conv_layers.append(nn.BatchNorm2d(self.num_filters))
             self.conv_layers.append(self.act_select(act=self.cnn_activation))
             ## Drop
             self.conv_layers.append(nn.Dropout(p=self.drop_prob))
@@ -53,7 +55,8 @@ class CNNNetwork(nn.Module):
                     )
                 )
                 ## BN
-                self.conv_layers.append(nn.BatchNorm2d(self.num_filters))
+                if self.bn:
+                    self.conv_layers.append(nn.BatchNorm2d(self.num_filters))
                 self.conv_layers.append(self.act_select(act=self.cnn_activation))
 
                 ## Drop

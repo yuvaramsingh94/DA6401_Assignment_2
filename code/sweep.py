@@ -91,6 +91,7 @@ sweep_configuration = {
         "batch_size": {"values": [32, 64]},
         "drop_prob": {"values": [0.2, 0.3, 0.4, 0.5]},
         "augmentation": {"values": [True, False]},
+        "batchnormalization": {"values": [True, False]},
         "cnn_activation": {
             "values": [
                 "relu",
