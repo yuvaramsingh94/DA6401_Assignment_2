@@ -45,18 +45,18 @@ class CNNNetwork(nn.Module):
             ## Drop
             self.conv_layers.append(nn.Dropout(p=self.drop_prob))
             self.conv_layers.append(nn.MaxPool2d(kernel_size=2))
-            for _ in range(self.num_conv_layers - 1):
+            for i in range(1, self.num_conv_layers + 1):
 
                 self.conv_layers.append(
                     nn.Conv2d(
-                        in_channels=self.num_filters,
-                        out_channels=self.num_filters,
+                        in_channels=self.num_filters * i,
+                        out_channels=self.num_filters * (i + 1),
                         kernel_size=self.filter_size,
                     )
                 )
                 ## BN
                 if self.bn:
-                    self.conv_layers.append(nn.BatchNorm2d(self.num_filters))
+                    self.conv_layers.append(nn.BatchNorm2d(self.num_filters * (i + 1)))
                 self.conv_layers.append(self.act_select(act=self.cnn_activation))
 
                 ## Drop
