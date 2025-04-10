@@ -86,7 +86,7 @@ sweep_configuration = {
     "method": "random",
     "metric": {"goal": "maximize", "name": "val_acc_epoch"},
     "parameters": {
-        "learning_rate": {"max": 0.001, "min": 0.00001},
+        "learning_rate": {"max": 0.001, "min": 0.0001},
         "CNN_filters": {"values": [32, 64]},
         "CNN_filter_size": {"values": [3, 5]},
         "num_dense_neurons": {"values": [128, 256, 512, 1024]},
