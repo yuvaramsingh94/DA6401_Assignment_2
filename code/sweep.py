@@ -198,13 +198,13 @@ def main():
         log_model=False,
         config=config,
     )
-    lr_monitor = LearningRateMonitor(logging_interval="epoch")
+    # lr_monitor = LearningRateMonitor(logging_interval="epoch")
     trainer = Trainer(
         max_epochs=config.epoch,
         accelerator="auto",
         log_every_n_steps=None,
         logger=wandb_logger,
-        callbacks=[lr_monitor],
+        # callbacks=[lr_monitor],
     )  # Added accelerator gpu, can be cpu also, devices set to 1
 
     try:
