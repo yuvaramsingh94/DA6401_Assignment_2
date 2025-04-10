@@ -1,5 +1,6 @@
 import pytorch_lightning as pl
-from pytorch_lightning.utilities.types import OptimizerLRScheduler
+
+# from pytorch_lightning.utilities.types import OptimizerLRScheduler
 from CNNNetwork import CNNNetwork
 from config import Config
 import torch.nn.functional as F

@@ -6,7 +6,7 @@ import pytorch_lightning as pl
 import torch
 import wandb
 import gc
-from lightning.pytorch.loggers import WandbLogger
+from pytorch_lightning.loggers import WandbLogger
 from torchvision.transforms.v2 import Normalize
 from torchvision.transforms import Resize
 from torch.utils.data import Dataset
@@ -14,11 +14,11 @@ import pandas as pd
 from torchvision.io import read_image, decode_image
 import os
 from sklearn.model_selection import StratifiedShuffleSplit
-from lightning.pytorch import Trainer, seed_everything
+from pytorch_lightning import Trainer, seed_everything
 from utils import dir_to_df
 from dataloader import CustomImageDataset
 import argparse
-from lightning.pytorch.callbacks import LearningRateMonitor
+from pytorch_lightning.callbacks import LearningRateMonitor
 
 SEED = 5
 seed_everything(SEED, workers=True)
@@ -199,7 +199,7 @@ def main():
         config=config,
     )
     lr_monitor = LearningRateMonitor(logging_interval="epoch")
-    trainer = pl.Trainer(
+    trainer = Trainer(
         max_epochs=config.epoch,
         accelerator="auto",
         log_every_n_steps=None,
