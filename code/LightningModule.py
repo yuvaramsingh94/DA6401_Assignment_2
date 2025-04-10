@@ -5,6 +5,7 @@ from config import Config
 import torch.nn.functional as F
 import torch
 import numpy as np
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 
 class LightningModule(pl.LightningModule):
@@ -71,7 +72,7 @@ class LightningModule(pl.LightningModule):
         self.log("train_acc_epoch", epoch_acc)
         if len(self.train_loss) > 0:
             self.log("train_loss_epoch", torch.cat(self.train_loss).mean())
-        # Reset counters
+        # Reset lists
         self.train_correct = 0
         self.train_total = 0
         self.train_loss = []
@@ -82,10 +83,25 @@ class LightningModule(pl.LightningModule):
         self.log("val_acc_epoch", epoch_acc)
         if len(self.val_loss) > 0:
             self.log("val_loss_epoch", torch.cat(self.val_loss).mean())
-        # Reset counters
+        # Reset lists
         self.val_correct = 0
         self.val_total = 0
         self.val_loss = []
 
+    ## https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.core.LightningModule.html#lightning.pytorch.core.LightningModule.configure_optimizers
     def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=self.config.LR)
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.config.LR)
+        lr_scheduler_config = {
+            "scheduler": ReduceLROnPlateau(
+                optimizer=optimizer, mode="max", factor=0.1, patience=2
+            ),
+            "interval": "epoch",
+            "frequency": 1,
+            "monitor": "val_acc_epoch",
+            # If set to `True`, will enforce that the value specified 'monitor'
+            # is available when the scheduler is updated, thus stopping
+            # training if not found. If set to `False`, it will only produce a warning
+            "strict": True,
+            "name": "LR_track",
+        }
+        return {"optimizer": optimizer, "lr_scheduler": lr_scheduler_config}

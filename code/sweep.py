@@ -18,6 +18,7 @@ from lightning.pytorch import Trainer, seed_everything
 from utils import dir_to_df
 from dataloader import CustomImageDataset
 import argparse
+from lightning.pytorch.callbacks import LearningRateMonitor
 
 SEED = 5
 seed_everything(SEED, workers=True)
@@ -197,11 +198,13 @@ def main():
         log_model=False,
         config=config,
     )
+    lr_monitor = LearningRateMonitor(logging_interval="epoch")
     trainer = pl.Trainer(
         max_epochs=config.epoch,
         accelerator="auto",
         log_every_n_steps=None,
         logger=wandb_logger,
+        callbacks=[lr_monitor],
     )  # Added accelerator gpu, can be cpu also, devices set to 1
 
     try:
