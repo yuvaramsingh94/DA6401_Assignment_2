@@ -40,10 +40,11 @@ class CNNNetwork(LightningModule):
                     padding="same",
                 )
             )
+
+            self.conv_layers.append(self.act_select(act=self.cnn_activation))
             ## BN
             if self.bn:
                 self.conv_layers.append(nn.BatchNorm2d(self.num_filters))
-            self.conv_layers.append(self.act_select(act=self.cnn_activation))
             ## Drop
             # self.conv_layers.append(nn.Dropout(p=self.drop_prob))
             # self.conv_layers.append(nn.MaxPool2d(kernel_size=2))
@@ -57,13 +58,14 @@ class CNNNetwork(LightningModule):
                         padding="same",
                     )
                 )
+
+                self.conv_layers.append(self.act_select(act=self.cnn_activation))
                 ## BN
                 if self.bn:
                     self.conv_layers.append(nn.BatchNorm2d(self.num_filters * (i + 1)))
-                self.conv_layers.append(self.act_select(act=self.cnn_activation))
 
                 ## Drop
-                self.conv_layers.append(nn.Dropout(p=self.drop_prob))
+                # self.conv_layers.append(nn.Dropout(p=self.drop_prob))
                 self.conv_layers.append(nn.MaxPool2d(kernel_size=2))
 
         ## Work with the dense layer

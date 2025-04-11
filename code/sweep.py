@@ -150,7 +150,7 @@ def main():
             # config=config,
         )
 
-    wandb.run.name = f"basic_CNN_CF_{wandb.config.CNN_filters}_D_{wandb.config.num_dense_neurons}_A_{wandb.config.augmentation}"
+    wandb.run.name = f"basic_CNN_BN_AFT_CF_{wandb.config.CNN_filters}_D_{wandb.config.num_dense_neurons}_A_{wandb.config.augmentation}"
     ## Update the config dict with the hpt from sweep
     config.LR = wandb.config.learning_rate
     config.batch_size = wandb.config.batch_size
