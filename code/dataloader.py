@@ -41,7 +41,7 @@ class CustomImageDataset(Dataset):
         img_path = self.dataset_df.iloc[idx]["image_path"]  # .values[0]
         image = decode_image(img_path, mode="RGB")
         image = self.transform(image)
-        image = self.image_normalization(image / image.max())
+        image = self.image_normalization(image / 255)
 
         label = self.dataset_df.iloc[idx]["label_id"]  # .values[0]
         return image, label
