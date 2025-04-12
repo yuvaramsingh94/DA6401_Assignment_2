@@ -98,8 +98,8 @@ class CNNNetwork(LightningModule):
 
             for layer in self.conv_layers:
                 x = layer(x)
-        # x = torch.flatten(x, 1)
-        x = torch.mean(x.view(x.size(0), x.size(1), -1), dim=2)
+        x = torch.flatten(x, 1)
+        # x = torch.mean(x.view(x.size(0), x.size(1), -1), dim=2)
 
         for layer in self.FCN_layers:
             x = layer(x)
