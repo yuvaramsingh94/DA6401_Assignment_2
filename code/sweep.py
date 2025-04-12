@@ -86,12 +86,12 @@ sweep_configuration = {
     "method": "random",
     "metric": {"goal": "maximize", "name": "val_acc_epoch"},
     "parameters": {
-        "learning_rate": {"max": 0.001, "min": 0.0001},
+        "learning_rate": {"max": 0.0005, "min": 0.00005},
         "CNN_filters": {"values": [8, 16, 4, 32]},
         "CNN_filter_size": {"values": [3, 5]},
-        "num_dense_neurons": {"values": [128, 256, 512, 1024]},
+        "num_dense_neurons": {"values": [128, 256, 512]},
         "batch_size": {"values": [16, 32]},
-        "drop_prob": {"values": [0.0, 0.3, 0.4, 0.5]},
+        "drop_prob": {"values": [0.0, 0.4, 0.5, 0.6]},
         "augmentation": {"values": [True, False]},
         "batchnormalization": {"values": [True, False]},
         "cnn_activation": {
@@ -99,7 +99,7 @@ sweep_configuration = {
                 "relu",
                 "elu",
                 "silu",
-                "mish",
+                # "mish",
                 "gelu",
             ]
         },
@@ -108,12 +108,12 @@ sweep_configuration = {
                 "relu",
                 "elu",
                 "silu",
-                "mish",
+                # "mish",
                 "gelu",
             ]
         },
     },
-    #    "early_terminate": {"type": "hyperband", "min_iter": 3, "eta": 3},
+    "early_terminate": {"type": "hyperband", "min_iter": 2, "eta": 2},
 }
 
 if basic_CNN:

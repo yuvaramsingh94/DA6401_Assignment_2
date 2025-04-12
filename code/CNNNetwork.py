@@ -47,7 +47,7 @@ class CNNNetwork(LightningModule):
                 self.conv_layers.append(nn.BatchNorm2d(self.num_filters))
             ## Drop
             # self.conv_layers.append(nn.Dropout(p=self.drop_prob))
-            # self.conv_layers.append(nn.MaxPool2d(kernel_size=2))
+            self.conv_layers.append(nn.MaxPool2d(kernel_size=2))
             for i in range(1, self.num_conv_layers + 1):
 
                 self.conv_layers.append(
