@@ -170,6 +170,7 @@ def main():
     config.dense_activation = wandb.config.dense_activation
     config.pretrained_bb = wandb.config.pretrained_bb
     config.drop_prob = wandb.config.drop_prob
+    config.bn = wandb.config.batchnormalization
 
     train_dataset = CustomImageDataset(
         dataset_df=train_set,
