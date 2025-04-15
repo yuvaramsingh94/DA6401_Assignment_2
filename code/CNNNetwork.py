@@ -36,7 +36,7 @@ class CNNNetwork(LightningModule):
                 nn.Conv2d(
                     in_channels=3,
                     out_channels=self.num_filters,
-                    kernel_size=self.filter_size,
+                    kernel_size=self.filter_size[0],
                     padding="same",
                 )
             )
@@ -48,13 +48,13 @@ class CNNNetwork(LightningModule):
             ## Drop
             # self.conv_layers.append(nn.Dropout(p=self.drop_prob))
             self.conv_layers.append(nn.MaxPool2d(kernel_size=2))
-            for i in range(1, self.num_conv_layers + 1):
+            for i in range(1, self.num_conv_layers):
 
                 self.conv_layers.append(
                     nn.Conv2d(
                         in_channels=self.num_filters * i,
                         out_channels=self.num_filters * (i + 1),
-                        kernel_size=self.filter_size,
+                        kernel_size=self.filter_size[i],
                         padding="same",
                     )
                 )

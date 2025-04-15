@@ -54,7 +54,7 @@ else:
     wandb.login()
 
 ## IF basic CNN architecture is required
-basic_CNN = False
+basic_CNN = True
 
 
 ## Dataloader
@@ -81,34 +81,42 @@ for train_idx, val_idx in split.split(data_df, data_df["label_id"]):
     train_set = data_df.iloc[train_idx]
     val_set = data_df.iloc[val_idx]
 
+CNN_filter_list = [
+    [3, 3, 3, 3, 3],
+    [5, 5, 5, 5, 5],
+    [7, 7, 7, 7, 7],
+    [5, 5, 3, 3, 3],
+    [7, 7, 3, 3, 3],
+    [7, 7, 5, 5, 5],
+]
 
 sweep_configuration = {
     "method": "random",
     "metric": {"goal": "maximize", "name": "val_acc_epoch"},
     "parameters": {
-        "learning_rate": {"max": 0.001, "min": 0.000005},
-        # "CNN_filters": {"values": [16, 32]},
-        # "CNN_filter_size": {"values": [3, 5]},
+        "learning_rate": {"max": 0.00009, "min": 0.000005},
+        "CNN_filters": {"values": [16, 32]},
+        "CNN_filter_size": {"values": CNN_filter_list},
         "num_dense_neurons": {"values": [128, 256, 512]},
         "batch_size": {"values": [16, 32]},
         "drop_prob": {"values": [0.0, 0.4, 0.5, 0.1]},
         "augmentation": {"values": [True, False]},
-        # "batchnormalization": {"values": [True, False]},
-        # "cnn_activation": {
-        #     "values": [
-        #         "relu",
-        #         "elu",
-        #         "silu",
-        #         # "mish",
-        #         "gelu",
-        #     ]
-        # },
+        "batchnormalization": {"values": [True, False]},
+        "cnn_activation": {
+            "values": [
+                "relu",
+                "elu",
+                "silu",
+                # "mish",
+                "gelu",
+            ]
+        },
         "dense_activation": {
             "values": [
                 "relu",
                 "elu",
                 "silu",
-                "mish",
+                # "mish",
                 "gelu",
             ]
         },
