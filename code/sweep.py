@@ -121,7 +121,7 @@ sweep_configuration = {
             ]
         },
     },
-    "early_terminate": {"type": "hyperband", "min_iter": 2, "eta": 2},
+    # "early_terminate": {"type": "hyperband", "min_iter": 2, "eta": 2},
 }
 
 if basic_CNN:
