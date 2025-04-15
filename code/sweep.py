@@ -54,7 +54,7 @@ else:
     wandb.login()
 
 ## IF basic CNN architecture is required
-basic_CNN = True
+basic_CNN = False
 
 
 ## Dataloader
@@ -81,42 +81,34 @@ for train_idx, val_idx in split.split(data_df, data_df["label_id"]):
     train_set = data_df.iloc[train_idx]
     val_set = data_df.iloc[val_idx]
 
-CNN_filter_list = [
-    [3, 3, 3, 3, 3],
-    [5, 5, 5, 5, 5],
-    [7, 7, 7, 7, 7],
-    [5, 5, 3, 3, 3],
-    [7, 7, 3, 3, 3],
-    [7, 7, 5, 5, 5],
-]
 
 sweep_configuration = {
     "method": "random",
     "metric": {"goal": "maximize", "name": "val_acc_epoch"},
     "parameters": {
-        "learning_rate": {"max": 0.00009, "min": 0.000005},
-        "CNN_filters": {"values": [16, 32]},
-        "CNN_filter_size": {"values": CNN_filter_list},
+        "learning_rate": {"max": 0.001, "min": 0.000005},
+        # "CNN_filters": {"values": [16, 32]},
+        # "CNN_filter_size": {"values": [3, 5]},
         "num_dense_neurons": {"values": [128, 256, 512]},
         "batch_size": {"values": [16, 32]},
         "drop_prob": {"values": [0.0, 0.4, 0.5, 0.1]},
         "augmentation": {"values": [True, False]},
-        "batchnormalization": {"values": [True, False]},
-        "cnn_activation": {
-            "values": [
-                "relu",
-                "elu",
-                "silu",
-                # "mish",
-                "gelu",
-            ]
-        },
+        # "batchnormalization": {"values": [True, False]},
+        # "cnn_activation": {
+        #     "values": [
+        #         "relu",
+        #         "elu",
+        #         "silu",
+        #         # "mish",
+        #         "gelu",
+        #     ]
+        # },
         "dense_activation": {
             "values": [
                 "relu",
                 "elu",
                 "silu",
-                # "mish",
+                "mish",
                 "gelu",
             ]
         },
@@ -158,18 +150,19 @@ def main():
             # config=config,
         )
 
-    wandb.run.name = f"basic_CNN_BN_AFT_CF_{wandb.config.CNN_filters}_D_{wandb.config.num_dense_neurons}_A_{wandb.config.augmentation}"
+    wandb.run.name = f"PT_CNN_BN_AFT_CF_{wandb.config.CNN_filters}_D_{wandb.config.num_dense_neurons}_A_{wandb.config.augmentation}"
     ## Update the config dict with the hpt from sweep
     config.LR = wandb.config.learning_rate
     config.batch_size = wandb.config.batch_size
-    config.num_filters = wandb.config.CNN_filters
-    config.filter_size = wandb.config.CNN_filter_size
+    # config.num_filters = wandb.config.CNN_filters
+    # config.filter_size = wandb.config.CNN_filter_size
     config.num_dense_neurons = wandb.config.num_dense_neurons
     config.augmentation = wandb.config.augmentation
-    config.cnn_activation = wandb.config.cnn_activation
+    # config.cnn_activation = wandb.config.cnn_activation
     config.dense_activation = wandb.config.dense_activation
     config.pretrained_bb = wandb.config.pretrained_bb
     config.drop_prob = wandb.config.drop_prob
+    # config.bn = wandb.config.batchnormalization
 
     train_dataset = CustomImageDataset(
         dataset_df=train_set,
