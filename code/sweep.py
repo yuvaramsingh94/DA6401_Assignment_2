@@ -190,7 +190,7 @@ def main():
         shuffle=True,
         drop_last=True,
         pin_memory=True,
-        num_workers=2,
+        # num_workers=2,
     )
     val_loader = DataLoader(
         val_dataset,
@@ -198,7 +198,7 @@ def main():
         shuffle=False,
         drop_last=False,
         pin_memory=True,
-        num_workers=2,
+        # num_workers=2,
     )
     lit_model = LightningModule(config=config)
     wandb_logger = WandbLogger(
