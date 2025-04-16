@@ -13,10 +13,20 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from lightning.pytorch import Trainer, seed_everything
 from dataloader import CustomImageDataset
 from utils import dir_to_df
+import argparse
 
 SEED = 5
 seed_everything(SEED, workers=True)
 
+parser = argparse.ArgumentParser(description="HP sweep")
+parser.add_argument(
+    "--kaggle", action="store_true", help="Set this flag to true if its kaggle"
+)
+parser.add_argument(
+    "--colab", action="store_true", help="Set this flag to true if its colab"
+)
+parser.add_argument("-w", "--wandb_key", type=str, help="wandb key")
+args = parser.parse_args()
 
 DATASET_PATH = os.path.join("dataset", "inaturalist_12K")
 TRAIN_PATH = os.path.join(DATASET_PATH, "train")
@@ -64,11 +74,23 @@ val_loader = DataLoader(
     # num_workers=2,
 )
 
-# wandb.login()
-# wandb.init(
-#    config=config,
-# )
-# Create and train the model
+if args.kaggle:
+    ## Kaggle secret
+    from kaggle_secrets import UserSecretsClient
+
+    secret_label = "wandb_api_key"
+    wandb_key = UserSecretsClient().get_secret(secret_label)
+    wandb.login(key=wandb_key)
+elif args.colab:
+    ## Kaggle secret
+    # from google.colab import userdata
+
+    # secret_label = "wandb_api_key"
+    # wandb_key = userdata.get(secret_label)
+    wandb.login(key=args.wandb_key)
+else:
+    wandb.login()
+
 lit_model = LightningModule(config=config)
 wandb_logger = WandbLogger(
     project=config.wandb_project,
