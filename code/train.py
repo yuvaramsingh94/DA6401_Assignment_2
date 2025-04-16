@@ -28,7 +28,12 @@ parser.add_argument(
 parser.add_argument("-w", "--wandb_key", type=str, help="wandb key")
 args = parser.parse_args()
 
+## Dataloader
 DATASET_PATH = os.path.join("dataset", "inaturalist_12K")
+if args.kaggle:
+    DATASET_PATH = os.path.join(
+        "/kaggle", "input", "intro-to-dl-a2-d", "inaturalist_12K"
+    )
 TRAIN_PATH = os.path.join(DATASET_PATH, "train")
 TEST_PATH = os.path.join(DATASET_PATH, "val")
 
