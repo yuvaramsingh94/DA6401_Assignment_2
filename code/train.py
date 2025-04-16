@@ -49,7 +49,7 @@ val_dataset = CustomImageDataset(
 
 train_loader = DataLoader(
     train_dataset,
-    batch_size=32,
+    batch_size=config.batch_size,
     shuffle=True,
     drop_last=True,
     pin_memory=True,
@@ -57,7 +57,7 @@ train_loader = DataLoader(
 )
 val_loader = DataLoader(
     val_dataset,
-    batch_size=32,
+    batch_size=config.batch_size,
     shuffle=False,
     drop_last=False,
     pin_memory=True,

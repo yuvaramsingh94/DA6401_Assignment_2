@@ -2,7 +2,7 @@ class Config:
     def __init__(self):
 
         self.wandb_project = "lightning_test"
-        self.wandb_entity = "v1"
+        self.wandb_entity = "vpt"
         self.num_conv_layers = 5
         self.num_filters = 32
         self.filter_size = 3
@@ -15,5 +15,7 @@ class Config:
         self.batch_size = 32
         self.epoch = 5
         self.pretrained_bb = True
+        self.freeze_bb = True
+        self.unfreeze_aft_epoch = 2
         self.drop_prob = 0.2
         self.bn = True

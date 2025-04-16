@@ -28,7 +28,7 @@ class CNNNetwork(LightningModule):
         self.bn = config.bn
         if self.pretrained_bb:
             self.bb = resnet50(weights=ResNet50_Weights.DEFAULT)
-
+            self.bb.fc = torch.nn.Identity()
         else:
             self.conv_layers = nn.ModuleList()
             ## First Conv layer

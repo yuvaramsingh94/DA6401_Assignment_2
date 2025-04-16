@@ -18,6 +18,16 @@ class LightningModule(pl.LightningModule):
         self.config = config
         ## Build the network
         self.CNNmodel = CNNNetwork(config=self.config)
+        ## If we are using pretrained bb and we want to freeze and train
+        ## The bb param will be frozen for initial k epochs
+        if self.config.pretrained_bb and self.config.freeze_bb:
+            # Freeze all backbone parameters initially
+            for param in self.CNNmodel.bb.parameters():
+                param.requires_grad = False
+            # Always keep FC layer trainable
+            for param in self.CNNmodel.bb.fc.parameters():
+                param.requires_grad = True
+
         self.loss = torch.nn.CrossEntropyLoss()
         # Initialize counters for accuracy calculation
         self.train_correct = 0
@@ -27,6 +37,13 @@ class LightningModule(pl.LightningModule):
 
         self.train_loss = []
         self.val_loss = []
+
+    def on_train_epoch_start(self):
+        # 0-indexed (epochs 0,1,2 frozen)
+        if self.current_epoch == self.config.unfreeze_aft_epoch:
+            print("\nUnfreezing backbone after epoch", self.config.unfreeze_aft_epoch)
+            for param in self.CNNmodel.bb.parameters():
+                param.requires_grad = True
 
     def forward(self, x):
         return self.CNNmodel(x)
