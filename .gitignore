@@ -173,7 +173,8 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 dataset/*
-code/lightning_logs/*
+Part_b/lightning_logs/*
+Part_a/lightning_logs/*
 wandb/*
 lightning_logs/*
 lightning_test/*
