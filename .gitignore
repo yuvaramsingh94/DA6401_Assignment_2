@@ -178,3 +178,4 @@ Part_a/lightning_logs/*
 wandb/*
 lightning_logs/*
 lightning_test/*
+weights/*

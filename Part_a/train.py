@@ -1,18 +1,15 @@
 from config import Config
-from CNNNetwork import CNNNetwork
 from LightningModule import LightningModule
-from torch.utils.data import DataLoader, TensorDataset
-import pytorch_lightning as pl
-import torch
-import wandb
+from torch.utils.data import DataLoader
 from lightning.pytorch.loggers import WandbLogger
 import pandas as pd
 from torchvision.transforms.v2 import Normalize
 import os
 from sklearn.model_selection import StratifiedShuffleSplit
-from lightning.pytorch import Trainer, seed_everything
+from lightning import Trainer, seed_everything
 from dataloader import CustomImageDataset
 from utils import dir_to_df
+from lightning.pytorch.callbacks import ModelCheckpoint
 
 SEED = 5
 seed_everything(SEED, workers=True)
@@ -70,17 +67,28 @@ val_loader = DataLoader(
 # )
 # Create and train the model
 lit_model = LightningModule(config=config)
+
+## Model checkpoint
+checkpoint_callback = ModelCheckpoint(
+    dirpath=config.dirpath,
+    filename=config.filename,
+    monitor="val_acc_epoch",
+    mode="max",
+)
+
+
 wandb_logger = WandbLogger(
     project=config.wandb_project,
     name=config.wandb_entity,
     log_model="all",
     config=config,
 )
-trainer = pl.Trainer(
-    max_epochs=5,
+trainer = Trainer(
+    max_epochs=config.epoch,
     accelerator="auto",
     log_every_n_steps=100,
     logger=wandb_logger,
+    callbacks=[checkpoint_callback],
 )  # Added accelerator gpu, can be cpu also, devices set to 1
 
 trainer.fit(

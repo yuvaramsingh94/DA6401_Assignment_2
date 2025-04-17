@@ -1,5 +1,3 @@
-import pytorch_lightning as pl
-
 # from pytorch_lightning.utilities.types import OptimizerLRScheduler
 from CNNNetwork import CNNNetwork
 from config import Config
@@ -7,9 +5,10 @@ import torch.nn.functional as F
 import torch
 import numpy as np
 from torch.optim.lr_scheduler import ReduceLROnPlateau
+from lightning import LightningModule
 
 
-class LightningModule(pl.LightningModule):
+class LightningModule(LightningModule):
     def __init__(
         self,
         config: Config,
