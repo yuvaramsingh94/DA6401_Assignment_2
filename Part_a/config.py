@@ -21,4 +21,6 @@ class Config:
         self.drop_prob = 0.1
         self.bn = True
         self.dirpath = os.path.join("weights", "part_a")
+        if not os.path.exists(self.dirpath):
+            os.makedirs(self.dirpath)
         self.filename = "test"
