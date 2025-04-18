@@ -16,7 +16,7 @@ class Config:
         self.num_classes = 10
         self.LR = 0.0000206362263432735
         self.batch_size = 16
-        self.epoch = 10
+        self.epoch = 5
         self.pretrained_bb = False
         self.drop_prob = 0.1
         self.bn = True
