@@ -92,7 +92,7 @@ sweep_configuration = {
         "CNN_filters": {"values": [16, 32]},
         "CNN_filter_size": {"values": CNN_filter_list},
         "num_dense_neurons": {"values": [128, 256, 512]},
-        "batch_size": {"values": [16, 32, 64]},
+        "batch_size": {"values": [32, 64]},
         "drop_prob": {"values": [0.0, 0.2, 0.1]},
         "augmentation": {"values": [True]},
         "batchnormalization": {"values": [True, False]},
