@@ -1,24 +1,18 @@
 from config import Config
-from CNNNetwork import CNNNetwork
 from LightningModule import LightningModule
-from torch.utils.data import DataLoader, TensorDataset
-import pytorch_lightning as pl
+from torch.utils.data import DataLoader
 import torch
 import wandb
 import gc
-from pytorch_lightning.loggers import WandbLogger
+from lightning.pytorch.loggers import WandbLogger
 from torchvision.transforms.v2 import Normalize
-from torchvision.transforms import Resize
-from torch.utils.data import Dataset
-import pandas as pd
-from torchvision.io import read_image, decode_image
 import os
 from sklearn.model_selection import StratifiedShuffleSplit
-from pytorch_lightning import Trainer, seed_everything
+from lightning import Trainer, seed_everything
 from utils import dir_to_df
 from dataloader import CustomImageDataset
 import argparse
-from pytorch_lightning.callbacks import LearningRateMonitor
+
 
 SEED = 5
 seed_everything(SEED, workers=True)
@@ -190,7 +184,7 @@ def main():
         shuffle=True,
         drop_last=True,
         pin_memory=True,
-        # num_workers=2,
+        num_workers=2,
     )
     val_loader = DataLoader(
         val_dataset,
@@ -198,7 +192,7 @@ def main():
         shuffle=False,
         drop_last=False,
         pin_memory=True,
-        # num_workers=2,
+        num_workers=2,
     )
     lit_model = LightningModule(config=config)
     wandb_logger = WandbLogger(
