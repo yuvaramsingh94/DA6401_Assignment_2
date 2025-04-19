@@ -41,7 +41,7 @@ def categorize_images(
     worst = df[worst_mask]
 
     if worst.empty:
-        top3 = np.argsort(-probs, axis=1)[:, :3]
+        top3 = np.argsort(-probs, axis=1)[:, :2]
         not_in_top3 = []
         for idx, row in df[df["label_id"] == class_idx].iterrows():
             row_idx = row.name
