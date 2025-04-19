@@ -5,7 +5,7 @@ class Config:
     def __init__(self):
 
         self.wandb_project = "lightning_test"
-        self.wandb_entity = "scratch_v1"
+        self.wandb_entity = "fie"
         self.num_conv_layers = 5
         self.num_filters = 32
         self.filter_size = [5, 5, 3, 3, 3]
