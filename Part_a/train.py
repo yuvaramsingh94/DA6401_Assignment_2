@@ -54,10 +54,16 @@ for train_idx, val_idx in split.split(data_df, data_df["label_id"]):
 config = Config()
 image_normalization = Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 train_dataset = CustomImageDataset(
-    dataset_df=train_set, image_normalization=image_normalization
+    dataset_df=train_set,
+    image_normalization=image_normalization,
+    size=(256, 256),
+    augmentation=config.augmentation,
 )
 val_dataset = CustomImageDataset(
-    dataset_df=val_set, image_normalization=image_normalization
+    dataset_df=val_set,
+    image_normalization=image_normalization,
+    size=(256, 256),
+    augmentation=False,
 )
 
 train_loader = DataLoader(

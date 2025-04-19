@@ -14,6 +14,12 @@ class LightningModule(LightningModule):
         config: Config,
     ):
         super(LightningModule, self).__init__()
+
+        ## save_hyperparameters is used to save the parameters passed
+        ## to the __init__ function of the LightningModule. This will
+        ## Be helpful when loading the trained weights
+        ## [Checkpointing](https://lightning.ai/docs/pytorch/stable/common/checkpointing_basic.html)
+        # self.save_hyperparameters()
         self.config = config
         ## Build the network
         self.CNNmodel = CNNNetwork(config=self.config)
