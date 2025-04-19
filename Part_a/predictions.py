@@ -97,7 +97,7 @@ pred_list = []
 
 for i in tqdm(range(len(test_df))):
     imgs, _ = test_dataset.__getitem__(i)
-    logits = lit_model(torch.unsqueeze(imgs, 0))
+    logits = lit_model(torch.unsqueeze(imgs, 0).to("cuda:0"))
     prob = F.softmax(logits, dim=1)  # .cpu().detach().numpy()
     preds = torch.argmax(prob, dim=1).cpu().detach().numpy()
     prob = prob.cpu().detach().numpy()
