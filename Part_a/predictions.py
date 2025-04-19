@@ -100,7 +100,7 @@ test_dataset = CustomImageDataset(
 
 wandb.init(
     project=config.wandb_project,
-    name="abc",
+    name="predictions_v1",
     config=config,
 )
 
