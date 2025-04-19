@@ -1,9 +1,6 @@
 # DA6401_Assignment_2
 
 
-
-# DA6401 Assignment 2
-
 Author : V M Vijaya Yuvaram Singh (DA24S015)
 
 ## Report
