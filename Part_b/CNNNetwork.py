@@ -6,9 +6,6 @@ from config import Config
 from torchvision.models import resnet50, ResNet50_Weights
 from pytorch_lightning import LightningModule
 
-## TODO: add Dropout
-## TODO: better preprocessing and model freezing
-
 
 class CNNNetwork(LightningModule):
     def __init__(

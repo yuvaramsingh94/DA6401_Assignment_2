@@ -20,7 +20,9 @@ def dir_to_df(PATH: os.path) -> pd.DataFrame:
     return data_df
 
 
-def categorize_images(df, class_name, class_to_idx, classes):
+def categorize_images(
+    df: pd.DataFrame, class_name: str, class_to_idx: dict, classes: list
+):
     class_idx = class_to_idx[class_name]
     prob_cols = classes
     probs = df[prob_cols].values
