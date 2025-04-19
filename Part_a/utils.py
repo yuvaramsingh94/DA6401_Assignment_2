@@ -40,6 +40,16 @@ def categorize_images(
     worst_mask = (df["label_id"] == class_idx) & (np.argmin(probs, axis=1) == class_idx)
     worst = df[worst_mask]
 
+    if worst.empty:
+        top5 = np.argsort(-probs, axis=1)[:, :5]
+        not_in_top5 = []
+        for idx, row in df[df["label_id"] == class_idx].iterrows():
+            row_idx = row.name
+            if class_idx not in top5[row_idx]:
+                not_in_top5.append(row_idx)
+        fallback = df.loc[not_in_top5]
+        worst = fallback
+
     def get_first_row(df_sub):
         return df_sub.iloc[0] if not df_sub.empty else None
 
