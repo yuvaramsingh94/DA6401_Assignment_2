@@ -34,19 +34,23 @@ args = parser.parse_args()
 
 
 config = Config()
-lit_model = LightningModule.load_from_checkpoint(
-    checkpoint_path=os.path.join("weights", "part_a", "40_epoch_run.ckpt"),
-    config=config,
-)
-lit_model = lit_model.eval()
+
 
 ## Test dataset loader
 DATASET_PATH = os.path.join("dataset", "inaturalist_12K")
+WT_PATH = os.path.join("weights", "part_a", "40_epoch_run.ckpt")
 if args.kaggle:
     DATASET_PATH = os.path.join(
         "/kaggle", "input", "intro-to-dl-a2-d", "inaturalist_12K"
     )
+    WT_PATH = "/kaggle/input/dl-as2-wt/40_epoch_run.ckpt"
 
+
+lit_model = LightningModule.load_from_checkpoint(
+    checkpoint_path=WT_PATH,
+    config=config,
+)
+lit_model = lit_model.eval()
 TEST_PATH = os.path.join(DATASET_PATH, "val")
 wandb.require("core")
 
