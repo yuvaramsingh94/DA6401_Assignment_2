@@ -73,7 +73,7 @@ class_mapping_dict = {j: i for i, j in enumerate(test_df["label"].unique())}
 
 test_df["label_id"] = test_df["label"].map(class_mapping_dict)
 
-# print(test_df.groupby(["label_id", "label"]).count())
+print(test_df.groupby(["label_id", "label"]).count())
 image_normalization = Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 test_dataset = CustomImageDataset(
     dataset_df=test_df,
@@ -123,19 +123,7 @@ if not os.path.exists(
 dummy_df.to_csv(os.path.join("weights", "part_a", "dummy_v1.csv"), index=False)
 
 
-classes = [
-    "Amphibia",
-    "Animalia",
-    "Arachnida",
-    "Aves",
-    "Fungi",
-    "Insecta",
-    "Mammalia",
-    "Mollusca",
-    "Plantae",
-    "Reptilia",
-]
-
+classes = list(class_mapping_dict.keys())
 
 class_to_idx = {cls: i for i, cls in enumerate(classes)}
 idx_to_class = {i: cls for i, cls in enumerate(classes)}
