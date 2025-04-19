@@ -40,8 +40,11 @@ test_df = dir_to_df(TEST_PATH)
 class_mapping_dict = {j: i for i, j in enumerate(test_df["label"].unique())}
 data_df["label_id"] = data_df["label"].map(class_mapping_dict)
 test_df["label_id"] = test_df["label"].map(class_mapping_dict)
+
+print(data_df.groupby(["label_id", "label"]).count())
+
 ## Randomize the dataframe
-data_df = data_df.sample(frac=1.0)
+# data_df = data_df.sample(frac=1.0)
 
 split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=SEED)
 
