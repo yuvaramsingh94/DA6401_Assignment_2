@@ -73,7 +73,19 @@ else:
 
 
 test_df = dir_to_df(TEST_PATH)
-class_mapping_dict = {j: i for i, j in enumerate(test_df["label"].unique())}
+class_name_list = [
+    "Reptilia",
+    "Animalia",
+    "Arachnida",
+    "Amphibia",
+    "Aves",
+    "Mollusca",
+    "Fungi",
+    "Insecta",
+    "Plantae",
+    "Mammalia",
+]
+class_mapping_dict = {j: i for i, j in enumerate(class_name_list)}
 
 test_df["label_id"] = test_df["label"].map(class_mapping_dict)
 
@@ -88,7 +100,7 @@ test_dataset = CustomImageDataset(
 
 wandb.init(
     project=config.wandb_project,
-    name="predictions_v1",
+    name="abc",
     config=config,
 )
 
